@@ -15,6 +15,7 @@ services:
 
   # Our own service
   example-service:
+    container_name: "example.service"
     image: ghcr.io/larsgjobloop/gitops-lite/example-service:2825eef49dac29fd80f103fe398896d67d6fb55a
     environment:
       DATABASE_CONNECTIONSTRING: "postgresql://myuser:mypassword@localhost:5432/mydatabase"

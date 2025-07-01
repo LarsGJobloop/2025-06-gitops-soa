@@ -18,6 +18,7 @@ services:
 
   # Our own service
   example-service:
+    container_name: "example.service"
     build:
       context: ./services/example-service
       dockerfile: Dockerfile
