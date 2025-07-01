@@ -35,6 +35,7 @@ jobs:
         # The name of all the service containers we want to push
         service:
           - example-service
+          - node-service
 
     steps:
       - uses: actions/checkout@v4
