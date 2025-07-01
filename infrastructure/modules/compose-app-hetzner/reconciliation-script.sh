@@ -13,4 +13,4 @@ else
 fi
 
 docker compose --file "$COMPOSE_FILE" pull
-docker compose --file "$COMPOSE_FILE" up --detach
+docker compose --file "$COMPOSE_FILE" up --detach --remove-orphans
