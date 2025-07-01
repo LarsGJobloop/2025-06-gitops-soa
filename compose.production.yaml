@@ -26,3 +26,14 @@ services:
       - "traefik.http.middlewares.example-service.stripprefix.prefixes=/api/example"
       - "traefik.http.routers.example-service.middlewares=example-service"
       - "traefik.http.services.example-service.loadbalancer.server.port=8080"
+
+  node-service:
+    container_name: "node.service"
+    image: ghcr.io/larsgjobloop/gitops-lite/node-service:aebd45f98240f6351a82e259ab5938b9e551b071
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.node-service.entrypoints=web"
+      - "traefik.http.routers.node-service.rule=PathPrefix(`/api/node`)"
+      - "traefik.http.middlewares.node-service.stripprefix.prefixes=/api/node"
+      - "traefik.http.routers.node-service.middlewares=node-service"
+      - "traefik.http.services.node-service.loadbalancer.server.port=80"
