@@ -36,6 +36,19 @@ services:
       # Forward to port 8080 on the service container
       - "traefik.http.services.example-service.loadbalancer.server.port=8080"
 
+  node-service:
+    container_name: "node.service"
+    build:
+      context: ./services/node-service
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.node-service.entrypoints=web"
+      - "traefik.http.routers.node-service.rule=PathPrefix(`/api/node`)"
+      - "traefik.http.middlewares.node-service.stripprefix.prefixes=/api/node"
+      - "traefik.http.routers.node-service.middlewares=node-service"
+      - "traefik.http.services.node-service.loadbalancer.server.port=80"
+
   # External services we usually depends on
   object-storage:
     image: minio/minio

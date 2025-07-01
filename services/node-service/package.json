@@ -1,0 +1,7 @@
+{
+  "name": "node-service",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^24.0.9"
+  }
+}
