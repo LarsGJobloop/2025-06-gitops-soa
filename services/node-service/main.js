@@ -1,28 +1,37 @@
 import { createServer } from 'http'
+import {
+  terminate,
+  createRouter,
+  logWelcome
+} from "./dsl.js"
 
 const port = 80;
-const address = "0.0.0.0";
+// Defaulting to the public interfaces since it's inside a container
+// The runtime does the opposite and needs explicit allowances
+const listenInterface = "0.0.0.0";
 
+const addressBook = {
+  "/internal": {
+    protocol: "http",
+    domain: "example-service:8080",
+    endpoint: "/"
+  },
+  "/external": {
+    protocol: "http",
+    domain: "127.0.0.1:80",
+    endpoint: "/api/example"
+  },
+}
+
+// Compose application
 const server = createServer();
 
-server.on("request", (request, response) => {
-  console.log("Recieved request")
-  const path = request.url
-  console.log(path)
-
-  response.writeHead(200)
-  response.end("OK!")
-});
-
 // Ensure we listen for termination signals, to avoid hanging calling processes
-// Also to avoid being forcefully stopped (killed)
-const shutdownHandler = (signal) => {
-  console.log(`Received: ${signal}. Shutting down`);
-  process.exit(0);
-}
-process.on("SIGINT", shutdownHandler);
-process.on("SIGTERM", shutdownHandler);
+// Also to avoid being forcefully stopped/killed (Docker uses a ~10s timeout)
+process.on("SIGINT", terminate); // Sent by Ctrl+C
+process.on("SIGTERM", terminate); // Sent by Docker
 
-server.listen(port, address, () => {
-  console.log(`Server started, listening on http://${address}:${port}`)
-});
+const handleRequest = createRouter(addressBook)
+server.on("request", handleRequest);
+
+server.listen(port, listenInterface, logWelcome);
