@@ -1,0 +1,9 @@
+# Ignore intermediate files
+.terraform
+
+# Ignore variables
+# Likely contains sensitive information
+*.tfvars
+
+# Ignore statefiles
+*.tfstate*
